@@ -1,25 +1,19 @@
-'use strict';
-const Sequelize = require('sequelize');
-const db = require('../db');
-const Student = require('./student');
+'use strict'
+const Sequelize = require('sequelize')
+const db = require('../db')
+const Student = require('./student')
 
 const Test = db.define('test', {
   subject: {
     type: Sequelize.STRING,
-    allowNull: false,
-    // validate: {
-    //   id: /[\w]+/,
-    // },
+    allowNull: false
   },
   grade: {
     type: Sequelize.INTEGER,
-    allowNull: false,
-    // validate: {
-    //   isNumeric: true,
-    // },
-  },
-});
+    allowNull: false
+  }
+})
 
-Test.belongsTo(Student, { as: 'student' });
+Test.belongsTo(Student)
 
-module.exports = Test;
+module.exports = Test

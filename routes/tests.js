@@ -1,47 +1,53 @@
-const router = require('express').Router();
-const Test = require('../db/models/test');
-const Student = require('../db/models/student');
+const router = require('express').Router()
+const Test = require('../db/models/test')
 
+// GET /tests
 router.get('/', async (req, res, next) => {
   try {
-    const tests = await Test.findAll();
-    res.send(tests);
-  } catch (err) {
-    next(err);
+    const tests = await Test.findAll()
+    res.send(tests)
+  } catch (error) {
+    next(error)
   }
-});
+})
 
+// GET /tests/:id
 router.get('/:id', async (req, res, next) => {
   try {
-    let test = await Test.findById(req.params.id);
-    if (test) {
-      res.send(test);
-    } else {
-      res.status(404).send('Test not found');
-    }
-  } catch (err) {
-    next(err);
+    // req.params URL
+    console.log('req params', req.params)
+    // req.body NON URL Info
+    const test = await Test.findById(req.params.id)
+    res.send(test)
+  } catch (error) {
+    next(error)
   }
-});
+})
 
+// POST /tests/student/:studentId
 router.post('/student/:studentId', async (req, res, next) => {
   try {
-    let student = await Student.findById(req.params.studentId);
-    let test = await Test.create(req.body);
-    let studentTest = await test.setStudent(student);
-    res.status(201).send(studentTest);
-  } catch (err) {
-    next(err);
-  }
-});
+    req.body.studentId = req.params.studentId
 
+    const createdTest = await Test.create(req.body)
+    res.status(201).send(createdTest)
+  } catch (error) {
+    next(error)
+  }
+})
+
+// DELETE /tests/:id
 router.delete('/:id', async (req, res, next) => {
   try {
-    await Test.destroy({ where: { id: req.params.id } });
-    res.status(204).send();
-  } catch (err) {
-    next(err);
+    await Test.destroy({
+      where: {
+        id: req.params.id
+      }
+    })
+    res.status(204).end()
+  } catch (error) {
+    next(error)
   }
-});
+})
 
-module.exports = router;
+module.exports = router
